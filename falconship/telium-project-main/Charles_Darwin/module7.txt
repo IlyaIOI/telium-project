@@ -1,0 +1,6 @@
+The Hall
+You exit the room and enter the main hall, the place connecting a lot of the rooms together. Here there are long corridors spanning most of the ship, dimly lit.
+3
+4
+9
+13

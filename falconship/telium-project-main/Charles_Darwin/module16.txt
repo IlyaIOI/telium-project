@@ -1,0 +1,6 @@
+The Right Engine
+his is one of the core parts of the ship to make it move. Together with the left engine it can go up to 16K mph. With the generator currently not working the best, the best speed would probably be 10k mph but that's even if both of the engines are working.
+12
+15
+17
+0

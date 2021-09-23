@@ -1,0 +1,6 @@
+The Left Engine
+One of the key parts of the ship, the left engine helps propel the ship forawrd. With help with the right engine, it can travel up to 16K mph. If the other engine is down, it can only travel 4.5K mph because it is not centred. Don't ask how I know this, I had a 2 hour rant to the lead engineer why having an off-centred engine is a bad idea. 
+10
+11
+16
+0
