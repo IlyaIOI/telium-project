@@ -29,7 +29,18 @@ def check_vent_shafts():
     if module in vent_shafts:
         print("There is a bank of fuel cells here.")
         print("You load one into your flamethrower.")
-        fuel_gained = 50
+        gainedrandom = random.randint(0,3)
+        if gainedrandom = 0:
+            fuel_gained = 20
+        elif gainedrandom = 1:
+            fuel_gained = 30
+        elif gainedrandom = 2:
+            fuel_gained = 40
+        elif gainedrandom = 3:
+            fuel_gained = 50
+        else:
+            print ("An Error occured adding fuel")
+        
         print("Fuel was",fuel,"now reading:",fuel+fuel_gained)
         fuel = fuel + fuel_gained
         print("The doors suddenly lock shut.")
@@ -51,6 +62,18 @@ def load_module():
     else:
         possible_moves = get_modules_from(module) #Get the output of the file containing the where you can go
         output_module() #Output which module you are in
+
+def lock():
+    global num_modules, power, locked
+    new_lock = int(input("Enter module to lock:"))
+    if new_lock<0 or new_lock>num_modules:
+        print("Invalid module. Operation failed.")
+    elif new_lock == queen:
+        print("Operation failed. Unable to lock module.")
+    else:
+        locked = new_lock
+    print("Aliens cannot get into module",locked)
+    power_used = 25 + 5*random.randint(0,5)
 
 def get_modules_from(module):
     global room, room_description
@@ -171,6 +194,7 @@ def gamemenu():
         elif menu_selection.lower() == "play" or menu_selection.lower() == "start" or menu_selection.lower() == "game" or menu_selection.lower() == "p": #If p or game or play or start is inputed, go to the fucntion play
             menu = 0
             selection = 1
+            spawn_npcs()
             game_play()
         else:
             print ("Invalid: Please type the item you want by typing the word in capitals.") #If it is none of them, ask to repeat using the correct the terms
@@ -178,7 +202,7 @@ def gamemenu():
 def game_play():
     global alive, won, selection
     while alive == True and won == False and selection == 1: #Start of game - Loops the program, asking the location you want to go to
-        spawn_npcs()
+        
         print("Queen alien is located in module:",queen)
         print("Ventilation shafts are located in modules:",vent_shafts)
         print("Information panels are located in modules:",info_panels)
