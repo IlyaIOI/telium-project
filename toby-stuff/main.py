@@ -113,6 +113,15 @@ def get_action():
                     module = move
                 else:
                     print("The module must be connected to the current module.")
+            if action[0].upper() == "S":
+                command = input("Scanner ready. Enter command (LOCK):")
+                if command[0].upper() == "L":
+                    move = 0
+                    if command[len(command)-2].isdigit():
+                        command = int(command[len(command)-2])
+                    if command[len(command)-1].isdigit():
+                        move += int(command[len(command)-1])
+                    lock(move)     
         except:
             continue
 
@@ -138,22 +147,37 @@ def spawn_npcs():
 def check_vent_shafts():
     global num_modules, module, vent_shafts, fuel
     if int(module) in vent_shafts:
-        print("There is a bank of fuel cells here.")
-        print("You load one into your flamethrower.")
+        print("There is a soul statue in here.")
+        print("You absorb it into your bosy.")
         fuel_gained = 50
-        print("Fuel was",fuel,"now reading:",fuel+fuel_gained)
+        print("Soul was",fuel,"now reading:",fuel+fuel_gained)
         fuel = fuel + fuel_gained
-        print("The doors suddenly lock shut.")
-        print("What is happening to the station?")
-        print("Our only escape is to climb into the ventilation shaft.")
-        print("We have no idea where we are going.")
+        print("The ground suddenly starts shaking.")
+        print("The floor collapses beneath you and you fall.")
         print("We follow the passages and find ourselves sliding down.")
         last_module = module
-        module = random.randint(1,num_modules)
-        load_module()
+        module = random.choice([i for i in range(1,num_modules) if i not in vent_shafts or i != module])
+
+#allows user to lock modules
+def lock(new_lock):
+    global num_modules, power, locked
+    try:
+        if new_lock <= 0:
+            new_lock = int(input("Enter module to lock:"))
+        if new_lock<0 or new_lock>num_modules: #validates chosen module
+            print("Invalid module. Operation failed.")
+        elif new_lock == queen:
+            print("Operation failed. Unable to lock module.")
+        elif new_lock == locked:
+            print("Module already locked")
+        else:
+            locked = new_lock
+            print("Aliens cannot get into module",locked)
+    except:
+        print("Invalid input.")
+    power -= 25 + 5*random.randint(0,5) #uses power
     
 #Main program starts here
-
 display_menu()
 
 #spawns in all npcs and then output's their locations
