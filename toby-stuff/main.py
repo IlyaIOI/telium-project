@@ -115,13 +115,15 @@ def get_action():
                     print("The module must be connected to the current module.")
             if action[0].upper() == "S":
                 command = input("Scanner ready. Enter command (LOCK):")
-                if command[0].upper() == "L":
+                if command.upper() == "LIFEFORMS":
+                    print("You sense " +str(len(workers) + 1) + " infected insects.")
+                elif command[0].upper() == "L":
                     move = 0
                     if command[len(command)-2].isdigit():
                         command = int(command[len(command)-2])
                     if command[len(command)-1].isdigit():
                         move += int(command[len(command)-1])
-                    lock(move)     
+                    lock(move)
         except:
             continue
 
@@ -147,8 +149,8 @@ def spawn_npcs():
 def check_vent_shafts():
     global num_modules, module, vent_shafts, fuel
     if int(module) in vent_shafts:
-        print("There is a soul statue in here.")
-        print("You absorb it into your bosy.")
+        print("There is a SOUL statue in here.")
+        print("You absorb it into your body.")
         fuel_gained = 50
         print("Soul was",fuel,"now reading:",fuel+fuel_gained)
         fuel = fuel + fuel_gained
@@ -176,6 +178,59 @@ def lock(new_lock):
     except:
         print("Invalid input.")
     power -= 25 + 5*random.randint(0,5) #uses power
+
+def move_queen():
+    global num_modules, module, last_module, locked, queen, won, vent_shafts
+    #If we are in the same module as the queen...
+    if int(module) == queen:
+        print("There it is! The queen alien is in this module...")
+        #Decide how many moves the queen should take
+        moves_to_make = random.randint(1,3)
+        can_move_to_last_module = False
+        while moves_to_make > 0:
+            #Get the escapes the queen can make
+            escapes = get_modules_from(queen)
+            #Remove the current module as an escape
+            if module in escapes:
+                escapes.remove(module)
+            #Allow queen to double back behind us from another module
+            if last_module in escapes and can_move_to_last_module == False:
+                escapes.remove(last_module)
+            #Remove a module that is locked as an escape
+            if locked in escapes:
+                escapes.remove(locked)
+            #If there is no escape then player has won...
+            if len(escapes) == 0:
+                won = True
+                moves_to_make = 0
+                print("...and the door is locked. It's trapped.")
+            #Otherwise move the queen to an adjacent module
+            else:
+                if moves_to_make == 1:
+                    print("...and has escaped.")
+                queen = random.choice(escapes)
+                moves_to_make = moves_to_make - 1
+                can_move_to_last_module = True
+                #Handle the queen being in a module with a ventilation shaft
+                while queen in vent_shafts:
+                    if moves_to_make > 1:
+                        print("...and has escaped.")
+                    print("We can hear scuttling in the ventilation shafts.")
+                    valid_move = False
+                    #Queen cannot land in a module with another ventilation shaft
+                    while valid_move == False:
+                        valid_move = True
+                        queen = random.randint(1,num_modules)
+                        if queen in vent_shafts:
+                            valid_move = False
+                    #Queen always stops moving after travelling through shaft
+                    #moves_to_make = 0
+
+#checks fuel and tells player if low
+def fuel_check():
+    global fuel
+    if fuel < 100:
+        print("You have low SOUL")
     
 #Main program starts here
 display_menu()
@@ -189,8 +244,10 @@ print("Worker aliens are located in modules:",workers)
     
 while alive and not won:
     check_vent_shafts()
+    move_queen()
     load_module()
     if won == False and alive == True:
+        fuel_check()
         output_moves()
         get_action()
 
