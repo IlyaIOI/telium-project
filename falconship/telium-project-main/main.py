@@ -26,23 +26,23 @@ workers = []        #Location of the worker aliens
 
 def check_vent_shafts():
     global num_modules, module, vent_shafts, fuel
-    if module in vent_shafts:
-        print("There is a bank of fuel cells here.")
+    if module in vent_shafts: #If you have selected the module with a vent shaft
+        print("There is a bank of fuel cells here.") 
         print("You load one into your flamethrower.")
-        gainedrandom = random.randint(0,3)
-        if gainedrandom = 0:
+        gainedrandom = random.randint(0,3) #Select a random amount of fuel to give you
+        if gainedrandom == 0:
             fuel_gained = 20
-        elif gainedrandom = 1:
+        elif gainedrandom == 1:
             fuel_gained = 30
-        elif gainedrandom = 2:
+        elif gainedrandom == 2:
             fuel_gained = 40
-        elif gainedrandom = 3:
+        elif gainedrandom == 3:
             fuel_gained = 50
         else:
             print ("An Error occured adding fuel")
         
-        print("Fuel was",fuel,"now reading:",fuel+fuel_gained)
-        fuel = fuel + fuel_gained
+        print("Fuel was",fuel,"now reading:",fuel+fuel_gained) #And output how much you have
+        fuel = fuel + fuel_gained #add the fuel
         print("The doors suddenly lock shut.")
         print("What is happening to the station?")
         print("Our only escape is to climb into the ventilation shaft.")
@@ -50,6 +50,8 @@ def check_vent_shafts():
         print("We follow the passages and find ourselves sliding down.")
         last_module = module
         module = random.randint(1,num_modules)
+        while module in vent_shafts:
+            module = random.randint(1,num_modules)
         load_module()
 
 def load_module():    
@@ -133,6 +135,17 @@ def spawn_npcs():
         i=1+1
         energy_cell.append(module_set[i])
 
+def lock():
+    global num_modules, power, locked
+    new_lock = int(input("Enter module to lock:"))
+    if new_lock<0 or new_lock>num_modules:
+        print("Invalid module. Operation failed.")
+    elif new_lock == queen:
+        print("Operation failed. Unable to lock module.")
+    else:
+        locked = new_lock
+        print("Aliens cannot get into module",locked)
+    power_used = 25 + 5*random.randint(0,5)
 
 def split_next(action):
     return [char for char in action] #Split "action" into an array, each character a different item in the array
@@ -174,6 +187,10 @@ def get_action():
                     
                 else:
                     print("The module must be connected to the current module.")
+        if action.lower() == "scanner" or action.lower() == "s":
+            command = input("Scanner ready. Enter command (LOCK):")
+            if command.lower() == "lock":
+                lock()
     
 #Main program starts here
 
