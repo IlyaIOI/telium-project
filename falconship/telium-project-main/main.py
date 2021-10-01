@@ -136,16 +136,38 @@ def spawn_npcs():
         energy_cell.append(module_set[i])
 
 def lock():
-    global num_modules, power, locked
-    new_lock = int(input("Enter module to lock:"))
-    if new_lock<0 or new_lock>num_modules:
-        print("Invalid module. Operation failed.")
-    elif new_lock == queen:
-        print("Operation failed. Unable to lock module.")
+    global num_modules, power, locked, possible_moves
+    new_lock = input("Enter module to lock:")
+    lock_split = split_next(new_lock)
+    lock_split_length = len(lock_split)
+    lock_split_length = lock_split_length - 1
+    if lock_split[0].lower == "l":
+        lock_split_length_down = int(lock_split_length-1)
+        lock_split_last_number = lock_split[lock_split_length].isdigit()
+        lock_split_second_last = lock_split[split_action_length_down].isdigit()
+        if lock_split_last_number == True:
+            if lock_split_second_last == True:
+                lock_split_two_digits = lock_split[lock_split_length-1]+lock_split[lock_split_length]
+            else:
+                lock_split_two_digits = lock_split[lock_split_length]
+            lock_module_number = int(lock_split_two_digits)
+            if lock_module_number in possible_moves
+
+
+    
+    if new_lock.isdigit() == False:
+        print ("System Malfunction: Invalid Module")
     else:
-        locked = new_lock
-        print("Aliens cannot get into module",locked)
-    power_used = 25 + 5*random.randint(0,5)
+        if new_lock<0 or new_lock>num_modules:
+            print("Invalid module. Operation failed.")
+        elif new_lock == queen:
+            print("Operation failed. Unable to lock module.")
+        elif new_lock == locked:
+            print("Nothing happened. This module is already locked.")
+        else:
+            locked = new_lock
+            print("Aliens cannot get into module",locked)
+            power_used = 25 + 5*random.randint(0,5)
 
 def split_next(action):
     return [char for char in action] #Split "action" into an array, each character a different item in the array
@@ -188,9 +210,43 @@ def get_action():
                 else:
                     print("The module must be connected to the current module.")
         if action.lower() == "scanner" or action.lower() == "s":
-            command = input("Scanner ready. Enter lock to:")
-            if command.lower() == "lock":
-                lock()
+            loop_scanner = True
+            while loop_scanner == True:
+                command = input("Scanner is ready. The following commands are available (LOCK, MAP, POWER, BACK):")
+                if command.lower() == "lock" or command.lower() == "l":
+                    loop_scanner = False
+                    lock()
+                elif command.lower() == "power" or command.lower() == "p":
+                    print ("The current power is at "+ str(power))
+                elif command.lower() == "back" or command.lower() == "b":
+                    loop_scanner = False
+                elif command.lower() == "map" or command.lower() == "m":
+                    print ("""\n\n\n\n\n                   ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━
+                   ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃
+           ────────┃   1   ┃──────┃   2   ┃──────┃   3   ┃──────┃   4   ┃──────┃   5   ┃──────┃   6   ┃────────
+           │       ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃       │
+           │       ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━       │
+           │                          │              │              │              │                          │
+           │               ───────────│              │              │              │───────────               │
+           │               │                         ───────│────────                         │               │
+       ━━━━━━━━━       ━━━━━━━━━                        ━━━━━━━━━                         ━━━━━━━━━       ━━━━━━━━━
+       ┃       ┃       ┃       ┃                        ┃       ┃                         ┃       ┃       ┃       ┃
+   ────┃   8   ┃───────┃   9   ┃────────────────────────┃   7   ┃─────────────────────────┃   13  ┃───────┃   14  ┃────
+   │   ┃       ┃       ┃       ┃                        ┃       ┃                         ┃       ┃       ┃       ┃   │
+   │   ━━━━━━━━━       ━━━━━━━━━                        ━━━━━━━━━                         ━━━━━━━━━       ━━━━━━━━━   │
+   │       │                                                                                                  │       │
+   │       │           ━━━━━━━━━                                                          ━━━━━━━━━           │       │
+   │       │           ┃       ┃                                                          ┃       ┃           │       │
+   │       ────────────┃   10  ┃                                                          ┃   15  ┃────────────       │
+   │                   ┃       ┃                                                          ┃       ┃                   │
+   │                   ━━━━━━━━━                                                          ━━━━━━━━━                   │
+   │                       │                                                                  │                       │
+   │   ━━━━━━━━━       ━━━━━━━━━                                                          ━━━━━━━━━       ━━━━━━━━━   │
+   │   ┃       ┃       ┃       ┃                                                          ┃       ┃       ┃       ┃   │
+   ────┃   11  ┃───────┃   12  ┃──────────────────────────────────────────────────────────┃   16  ┃───────┃   17  ┃────
+       ┃       ┃       ┃       ┃                                                          ┃       ┃       ┃       ┃  
+       ━━━━━━━━━       ━━━━━━━━━                                                          ━━━━━━━━━       ━━━━━━━━━\n\n\n""")
+                
     
 #Main program starts here
 
@@ -257,19 +313,33 @@ gamemenu() #On start, go to the game menu
 
 #┃
 
-#               ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━
-#               ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃
-#       ────────┃   1   ┃──────┃   2   ┃──────┃   3   ┃──────┃   4   ┃──────┃   5   ┃──────┃   6   ┃────────
-#       │       ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃       │
-#       │       ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━       │
-#       │                          │              │              │              │                          │
-#       │               ───────────│              │              │              │───────────               │
-#       │               │                         ───────│────────                         │               │
-#   ━━━━━━━━━       ━━━━━━━━━                        ━━━━━━━━━                         ━━━━━━━━━       ━━━━━━━━━
-#   ┃       ┃       ┃       ┃                        ┃       ┃                         ┃       ┃       ┃       ┃
-#   ┃   8   ┃───────┃   9   ┃────────────────────────┃   7   ┃─────────────────────────┃   13  ┃───────┃   14  ┃
-#   ┃       ┃       ┃       ┃                        ┃       ┃                         ┃       ┃       ┃       ┃
-#   ━━━━━━━━━       ━━━━━━━━━                        ━━━━━━━━━                         ━━━━━━━━━       ━━━━━━━━━
+#                   ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━
+#                   ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃
+#           ────────┃   1   ┃──────┃   2   ┃──────┃   3   ┃──────┃   4   ┃──────┃   5   ┃──────┃   6   ┃────────
+#           │       ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃      ┃       ┃       │
+#           │       ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━      ━━━━━━━━━       │
+#           │                          │              │              │              │                          │
+#           │               ───────────│              │              │              │───────────               │
+#           │               │                         ───────│────────                         │               │
+#       ━━━━━━━━━       ━━━━━━━━━                        ━━━━━━━━━                         ━━━━━━━━━       ━━━━━━━━━
+#       ┃       ┃       ┃       ┃                        ┃       ┃                         ┃       ┃       ┃       ┃
+#   ────┃   8   ┃───────┃   9   ┃────────────────────────┃   7   ┃─────────────────────────┃   13  ┃───────┃   14  ┃────
+#   │   ┃       ┃       ┃       ┃                        ┃       ┃                         ┃       ┃       ┃       ┃   │
+#   │   ━━━━━━━━━       ━━━━━━━━━                        ━━━━━━━━━                         ━━━━━━━━━       ━━━━━━━━━   │
+#   │       │                                                                                                  │       │
+#   │       │           ━━━━━━━━━                                                          ━━━━━━━━━           │       │
+#   │       │           ┃       ┃                                                          ┃       ┃           │       │
+#   │       ────────────┃   10  ┃                                                          ┃   15  ┃────────────       │
+#   │                   ┃       ┃                                                          ┃       ┃                   │
+#   │                   ━━━━━━━━━                                                          ━━━━━━━━━                   │
+#   │                       │                                                                  │                       │
+#   │   ━━━━━━━━━       ━━━━━━━━━                                                          ━━━━━━━━━       ━━━━━━━━━   │
+#   │   ┃       ┃       ┃       ┃                                                          ┃       ┃       ┃       ┃   │
+#   ────┃   11  ┃───────┃   12  ┃──────────────────────────────────────────────────────────┃   16  ┃───────┃   17  ┃────
+#       ┃       ┃       ┃       ┃                                                          ┃       ┃       ┃       ┃  
+#       ━━━━━━━━━       ━━━━━━━━━                                                          ━━━━━━━━━       ━━━━━━━━━
+
+       
 #
 #
 #
