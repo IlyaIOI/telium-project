@@ -188,7 +188,7 @@ def get_action():
                 else:
                     print("The module must be connected to the current module.")
         if action.lower() == "scanner" or action.lower() == "s":
-            command = input("Scanner ready. Enter command (LOCK):")
+            command = input("Scanner ready. Enter lock to:")
             if command.lower() == "lock":
                 lock()
     
